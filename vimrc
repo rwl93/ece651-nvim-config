@@ -56,7 +56,6 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-frecency.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
 " Neovim LSP setup
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
@@ -260,17 +259,6 @@ if !exists(":DiffOrig")
 endif
 " }}}
 " Plugin Config {{{
-" Treesitter {{{
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "maintained",
-  highlight = { enable = true },
-  incremental_selection = { enable = true },
-  textobjects = { enable = true },
-}
-EOF
-" }}}
 " Lualine (statusline) {{{
 lua << END
 require('lualine').setup {
@@ -281,6 +269,17 @@ require('lualine').setup {
   }
 }
 END
+" }}}
+" Treesitter {{{
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = "maintained",
+  highlight = { enable = true },
+  incremental_selection = { enable = true },
+  textobjects = { enable = true },
+}
+EOF
 " }}}
 " Telescope {{{
 " Use j/k for moving in telescope
@@ -327,41 +326,63 @@ nnoremap <leader>li <cmd>Telescope lsp_implementations<CR>
 nnoremap <leader>ls <cmd>Telescope lsp_document_symbols<CR>
 nnoremap <leader>lws <cmd>Telescope lsp_workspace_symbols<CR>
 " }}}
+" LSP Installer {{{
+lua << EOF
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+  local opts = {}
+  server:setup(opts)
+end)
+EOF
+" }}}
 " LSP Servers {{{
 lua << EOF
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(
-    vim.lsp.protocol.make_client_capabilities()
-  )
-  require('lspconfig').sumneko_lua.setup{ capabilities = capabilities }
-  require('lspconfig').jdtls.setup{ capabilities = capabilities }
-  require('lspconfig').vimls.setup{ capabilities = capabilities }
-  require('lspconfig').clangd.setup{ capabilities = capabilities }
-  require('lspconfig').dockerls.setup{ capabilities = capabilities }
-  require('lspconfig').pyright.setup{ capabilities = capabilities }
-  require('lspconfig').texlab.setup{ capabilities = capabilities }
-  require('lspconfig').zeta_note.setup{ capabilities = capabilities }
-EOF
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
-augroup lsp_map
-  autocmd!
-  autocmd FileType java,vim,python,cpp,lua
-    \ nnoremap <buffer> gD <cmd>lua vim.lsp.buf.declaration()<cr>                |
-    \ nnoremap <buffer> gd <cmd>lua vim.lsp.buf.definition()<cr>                 |
-    \ nnoremap <buffer> K  <cmd>lua vim.lsp.buf.hover()<cr>                      |
-    \ nnoremap <buffer> gr <cmd>lua vim.lsp.buf.references()<cr>                 |
-    \ nnoremap <buffer> gs <cmd>lua vim.lsp.buf.signature_help()<cr>             |
-    \ nnoremap <buffer> gi <cmd>lua vim.lsp.buf.implementation()<cr>             |
-    \ nnoremap <buffer> gt <cmd>lua vim.lsp.buf.type_definition()<cr>            |
-    \ nnoremap <buffer> <leader>gw <cmd>lua vim.lsp.buf.document_symbol()<cr>    |
-    \ nnoremap <buffer> <leader>gW',<cmd>lua vim.lsp.buf.workspace_symbol()<cr>  |
-    \ nnoremap <buffer> <leader>af <cmd>lua vim.lsp.buf.code_action()<cr>        |
-    \ nnoremap <buffer> <leader>ar <cmd>lua vim.lsp.buf.rename()<cr>             |
-    \ nnoremap <buffer> <leader>= <cmd>lua vim.lsp.buf.formatting()<cr>          |
-    \ nnoremap <buffer> <leader>ai <cmd>lua vim.lsp.buf.incoming_calls()<cr>     |
-    \ nnoremap <buffer> <leader>ao <cmd>lua vim.lsp.buf.outgoing_calls()<cr>     |
-    " \ nnoremap <buffer> <leader>ah <cmd>lua vim.lsp.buf.hover()<cr> |
-    " \ nnoremap <buffer> <leader>ee <cmd>lua vim.lsp.util.show_line_diagnostics()<cr>
-augroup END
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gw', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gW', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
+local servers = {'jdtls', 'pyright', 'sumneko_lua', 'vimls', 'clangd',
+                 'dockerls', 'texlab', 'zeta_note'}
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup{
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes=150,
+    },
+  }
+end
+EOF
 " }}}
 " Completion {{{
 set completeopt=menu,menuone,noselect
@@ -471,19 +492,13 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 "" }}}
-" ALE {{{
-" let g:ale_completion_enabled = 0
-" let g:ale_disable_lsp = 0
-" let g:ale_linters = {'java': ['eclipselsp']}
-" }}}
 " vim-test {{{
-nnoremap <silent> t<C-n> :TestNearest<CR>
-nnoremap <silent> t<C-f> :TestFile<CR>
-nnoremap <silent> t<C-s> :TestSuite<CR>
-nnoremap <silent> t<C-l> :TestLast<CR>
-nnoremap <silent> t<C-g> :TestVisit<CR>
+nnoremap <silent> <Leader>tn :TestNearest<CR>
+nnoremap <silent> <Leader>tf :TestFile<CR>
+nnoremap <silent> <Leader>ts :TestSuite<CR>
+nnoremap <silent> <Leader>tl :TestLast<CR>
+nnoremap <silent> <Leader>tg :TestVisit<CR>
 let test#java#runner = 'gradletest'
-" let test#strategy = 'vimterminal'
 " }}}
 " CtrlP Uncomment if you prefer over telescope {{{
 " let g:ctrlp_map = '<c-f>'
