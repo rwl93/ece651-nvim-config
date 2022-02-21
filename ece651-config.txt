@@ -1,0 +1,8 @@
+*ece651-config.txt* Configuration walkthrough for ECE 651 Java config
+
+A walkthrough for the ECE651 Neovim Java development configuration that
+describes the plugins installed, local mappings, and vimrc settings.
+
+NOTE: We assume that you have at least basic familiarity with the Vim editor.
+If you are new to Vim, please refer to |vimtutor| <-- press K or <C-]> to jump.
+
