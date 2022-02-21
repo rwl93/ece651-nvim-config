@@ -6,3 +6,7 @@ describes the plugins installed, local mappings, and vimrc settings.
 NOTE: We assume that you have at least basic familiarity with the Vim editor.
 If you are new to Vim, please refer to |vimtutor| <-- press K or <C-]> to jump.
 
+
+
+	*Todo	fjdkslafjkdsla
+	*Error	something wrong
