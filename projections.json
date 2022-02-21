@@ -1,0 +1,13 @@
+{
+  "src/main/java/edu/duke/NETID/battleship/*.java": {
+    "alternate": "src/test/java/edu/duke/NETID/battleship/{}Test.java",
+    "type": "source"
+  },
+  "src/test/java/edu/duke/NETID/battleship/*Test.java": {
+    "alternate": "src/main/java/edu/duke/NETID/battleship/{}.java",
+    "type": "test"
+  },
+  "*.java": {"dispatch": "javac {file}"},
+  "*": {"make": "gradle build"}
+}
+
