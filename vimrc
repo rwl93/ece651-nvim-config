@@ -17,14 +17,13 @@ Plug 'dracula/vim', {'as': 'dracula'}
 Plug 'whatyouhide/vim-gotham'
 " Nice icons
 " Replaced with nvim-web-devicons: Plug 'ryanoasis/vim-devicons'
-" Note requires a patched font
+" NOTE: requires a patched font
 Plug 'kyazdani42/nvim-web-devicons'
 " Tabline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
 " Git integration
 " Replaced with gitsigns: Plug 'airblade/vim-gitgutter'
-Plug 'lewis6991/gitsigns.vim'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-fugitive'
 " Color helper
 Plug 'norcalli/nvim-colorizer.lua'
@@ -38,6 +37,8 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-unimpaired'
 " Project manager
 Plug 'tpope/vim-projectionist'
+" Repeat commands
+Plug 'tpope/vim-repeat'
 " Tagbar navigation
 Plug 'preservim/tagbar'
 " Snippets
@@ -269,6 +270,17 @@ require'nvim-treesitter.configs'.setup {
   textobjects = { enable = true },
 }
 EOF
+" }}}
+" Lualine (statusline) {{{
+lua << END
+require('lualine').setup {
+  options = {
+    theme = 'dracula',
+    section_separators = '',
+    component_separators = '',
+  }
+}
+END
 " }}}
 " Telescope {{{
 " Use j/k for moving in telescope

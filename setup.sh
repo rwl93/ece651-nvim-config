@@ -2,15 +2,16 @@
 # Basic vim setup script
 # 1. Install (Neo)vim
 nvim_install=-1
-while [[ ! $nvim_install =~ ^[01]$ ]]
+while [[ ! $nvim_install =~ ^[yYnN]$ ]]
 do
-  read -p "Do you want to install Neovim v0.6.1? (0/1)\n
-  If you already have nvim installed you can bypass this step.\n
-  However, the setup has been tested with v0.6.1 and the nightly build only\n
-  [default=0]: " nvim_install
+  read -p "Do you want to install Neovim v0.6.1?
+  If you already have nvim installed you can bypass this step.
+  However, the setup has been tested with v0.6.1 and the nightly build only
+  [default=y]/n: " nvim_install
+  nvim_install=${nvim_install:-y}
 done
 
-if [[ nvim_install -eq 0 ]]
+if [ "$nvim_install" == "y" -o "$nvim_install" == "Y" ]
 then
   echo "Downloading Neovim v0.6.1"
   wget -Nq https://github.com/neovim/neovim/releases/download/v0.6.1/nvim.appimage
@@ -26,16 +27,16 @@ then
   if [[ -f $HOME/.local/bin/nvim ]]
   then
     echo "$HOME/.local/bin/nvim already exists."
-    echo "Would you like to overwrite it? [n]"
-    read overwrite
+    read -p "Would you like to overwrite it? y/[n]" overwrite
+    overwrite=${overwrite:-n}
     if [ "$overwrite" == "y" -o "$overwrite" == "Y" ]
     then
       rm $HOME/.local/bin/nvim
     else
+      echo "Exiting: If you do not want to overwrite your current installation do not choose the install option."
       exit 1
     fi
   fi
-  ln -s `pwd`/nvim.appimage $HOME/.local/bin/nvim
   export PATH=$PATH:$HOME/.local/bin
   echo "PATH=$PATH:$HOME/.local/bin" >> $HOME/.bashrc
 else
@@ -43,7 +44,7 @@ else
   nvimexec=`which nvim`
   if [[ $? -ne 0 ]]
   then
-    echo "Could not find nvim executable"
+    echo "Exiting: Could not find nvim executable"
     exit 1
   fi
   echo "Using ${nvimexec}"
@@ -54,6 +55,7 @@ vimexec=`which vim`
 if [[ $? -ne 0 ]]
 then
   read -p "Would you like to add 'vim' command in addition to 'nvim'? y/[n]: " symlinkvim
+  symlinkvim=${symlinkvim:-n}
   if [ "$symlinkvim" == "y" -o "$symlinkvim" == "Y" ]
   then
     ln -s `pwd`/nvim.appimage $HOME/.local/bin/vim
@@ -69,7 +71,21 @@ export VISUAL='nvim'
 echo "export EDITOR='nvim'" >> $HOME/.bashrc
 echo "export VISUAL='nvim'" >> $HOME/.bashrc
 
-# 3. Setup vim dotfiles
+# 3. Install Fonts
+read -p "Would you like to install a patched font (DejaVu Sans Mono) which adds nice icons? [y]/n: " installfonts
+installfonts=${installfonts:-y}
+if [ "$installfonts" == "y" -o "$installfonts" == "Y" ]
+then
+  wget -Nq https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DejaVuSansMono.zip
+  mkdir -p $HOME/.local/share/fonts/truetype/DejaVuSansMono
+  unzip DejaVuSansMono.zip -d $HOME/.local/share/fonts/truetype/DejaVuSansMono/
+  fc-cache -f
+  echo "xterm*faceName: DejaVu Sans Mono" >> ~/.Xresources
+  xrdb -merge ~/.Xresources
+  echo "If you are not using xterm, you will have to set your font to DejaVu Sans Mono (or any patched font) to see symbols"
+fi
+
+# 4. Setup vim dotfiles
 mkdir -p $HOME/.config/nvim
 if [[ -f $HOME/.config/nvim/init.vim ]]
 then
@@ -87,7 +103,7 @@ fi
 mkdir -p $HOME/.local/share/nvim/site/doc
 cp ece651-config.txt /home/rwl93/.local/share/nvim/site/doc/ece651-config.txt
 
-# 4. Install vim-plug
+# 5. Install vim-plug
 echo "Installing vim-plug to manage plugins"
 echo "See repository at https://github.com/junegunn/vim-plug"
 echo "Also, find help in vim with ':h plug'"
@@ -95,10 +111,10 @@ git clone https://github.com/junegunn/vim-plug.git
 sh -c 'curl -fLo ${HOME}/.local/share/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-# 5. Install plugins
+# 6. Install plugins
 nvim -E -u vimrc +PlugInstall - <<<'helptags ALL'
 
-# 5. Point to walkthrough
+# 7. Point to walkthrough
 cat << EOF
 Congratulations! Neovim was successfully installed.
 To get started, open Neovim with nvim (or vim if chosen earlier) and type:
