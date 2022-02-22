@@ -156,6 +156,8 @@ nvim -E -u vimrc-install +PlugInstall - <<<'helptags ALL'
 
 # 8. Point to walkthrough
 cat << EOF
+
+-------------------------------------------------------------------------------
 Congratulations! Neovim was successfully installed.
 To get started, open Neovim with nvim (or vim if chosen earlier) and type:
     :PlugInstall
