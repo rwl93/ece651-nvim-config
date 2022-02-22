@@ -210,19 +210,5 @@ the customizations and workflow we just installed. To do this run:
     :helptags ALL
     :h ece651-config
 
-Note: If you are still seeing a startup error about Telescope and fzf follow
-these steps:
-    1. Open vim go to vimrc/init.vim by typing "ev" in normal mode
-    2. Search for the telescope-fzf-native plugin by typing (in normal mode):
-        "/telescope-fzf-native<Enter>"
-    3. Comment out that line with "gcc" in normal mode
-    4. Save (":w") and source with "sv"
-    5. Run: ":PlugClean"
-    6. Uncomment the telescope-fzf-native line
-    7. Repeat step 4
-    8. Run: ":PlugInstall"
-    9. Restart vim and you shouldn't see the error
-I'm not exactly sure why this error is happening, but the above steps should
-solve the issue. See ":h ECE651ConfigFAQ" for this list of steps if you forget
-them.
+Note: If you are still seeing a startup error about Telescope see ":h ECE651ConfigFAQ".
 EOF
