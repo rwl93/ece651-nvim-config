@@ -114,22 +114,45 @@ wget -O ${HOME}/.local/share/nvim/site/autoload/plug.vim \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # 6. Install dependencies
-echo "Installing dependencies: Nodejs and npm"
-sudo apt update
+cat << EOF
+
+
+-------------------------------------------------------------------------------
+Installing dependencies: Nodejs and npm
+EOF
+read -p "Would you like to update and upgrade apt before downloading dependencies?y/[n]: " preupgrade
+preupgrade=${preupgrade:-n}
+if [ "$preupgrade" == "y" -o "$preupgrade" == "Y" ]
+then
+  sudo apt update && sudo apt upgrade
+fi
+
 # required for install LSP servers
 sudo apt install -y nodejs npm
 # Java
+cat << EOF
+-------------------------------------------------------------------------------
+Installing dependencies: Java and clang-format
+EOF
 sudo apt install openjdk-16-jdk clang-format
 # Telescope reqs
+cat << EOF
+-------------------------------------------------------------------------------
+Installing dependencies: Ripgrep fd-find fzf
+EOF
 sudo apt install ripgrep fd-find
 # Fzf
 sudo apt install fzf
 # Python3 reqs
+cat << EOF
+-------------------------------------------------------------------------------
+Installing dependencies: python3
+EOF
 sudo apt install python3 python3-pip
 sudo pip3 install neovim
 
 # 7. Install plugins
-nvim -E -u vimrc +PlugInstall - <<<'helptags ALL'
+# nvim -E -u vimrc +PlugInstall - <<<'helptags ALL'
 
 # 8. Point to walkthrough
 cat << EOF
