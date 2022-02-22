@@ -1,0 +1,72 @@
+" ECE 651 Vimrc Used During Installation
+" Randy Linderman
+call plug#begin()
+" Install vim-plug to get help files
+Plug 'junegunn/vim-plug'
+" Required by other plugins
+Plug 'nvim-lua/plenary.nvim'
+" Gradle wrapper
+Plug 'hdiniz/vim-gradle'
+" Clover code coverage helper
+Plug 'rwl93/dcoverage'
+" Testing tools
+Plug 'vim-test/vim-test'
+" Colorscheme
+Plug 'dracula/vim', {'as': 'dracula'}
+Plug 'whatyouhide/vim-gotham'
+" Nice icons
+" Replaced with nvim-web-devicons: Plug 'ryanoasis/vim-devicons'
+" NOTE: requires a patched font
+Plug 'kyazdani42/nvim-web-devicons'
+" Tabline
+Plug 'nvim-lualine/lualine.nvim'
+" Git integration
+" Replaced with gitsigns: Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'tpope/vim-fugitive'
+" Color helper
+Plug 'norcalli/nvim-colorizer.lua'
+" Commands and text objects for surrounding objects {(['""'])}
+Plug 'tpope/vim-surround'
+" Easy commenting mappings
+Plug 'tpope/vim-commentary'
+" Elegant Netrw settings
+Plug 'tpope/vim-vinegar'
+" Handy bracket mappings
+Plug 'tpope/vim-unimpaired'
+" Project manager
+Plug 'tpope/vim-projectionist'
+" Repeat commands
+Plug 'tpope/vim-repeat'
+" Tagbar navigation
+Plug 'preservim/tagbar'
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" Nice syntax highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" File searching
+" NOTE: Ctrlp is a good alternative if you find telescope too distracting.
+" Plug 'kien/ctrlp.vim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make' }
+Plug 'nvim-telescope/telescope-project.nvim'
+Plug 'nvim-telescope/telescope-frecency.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+" Neovim LSP setup
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+" Completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'octaltree/cmp-look'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'onsails/lspkind-nvim'
+Plug 'mfussenegger/nvim-lint'
+Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+call plug#end()
