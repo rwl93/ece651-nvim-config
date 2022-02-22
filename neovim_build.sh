@@ -37,6 +37,7 @@ then
       exit 1
     fi
   fi
+  ln -s `pwd`/nvim.appimage $HOME/.local/bin/nvim
   export PATH=$PATH:$HOME/.local/bin
   echo "PATH=$PATH:$HOME/.local/bin" >> $HOME/.bashrc
 else
@@ -108,9 +109,9 @@ echo "Installing vim-plug to manage plugins"
 echo "See repository at https://github.com/junegunn/vim-plug"
 echo "Also, find help in vim with ':h plug'"
 git clone https://github.com/junegunn/vim-plug.git
-sh -c 'curl -fLo ${HOME}/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
+mkdir -p ${HOME}/.local/share/nvim/site/autoload/
+wget -O ${HOME}/.local/share/nvim/site/autoload/plug.vim \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # 6. Install dependencies
 echo "Installing dependencies: Nodejs and npm"
@@ -121,6 +122,11 @@ sudo apt install -y nodejs npm
 sudo apt install openjdk-16-jdk clang-format
 # Telescope reqs
 sudo apt install ripgrep fd-find
+# Fzf
+sudo apt install fzf
+# Python3 reqs
+sudo apt install python3 python3-pip
+sudo pip3 install neovim
 
 # 7. Install plugins
 nvim -E -u vimrc +PlugInstall - <<<'helptags ALL'

@@ -52,7 +52,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-frecency.nvim'
@@ -191,7 +190,7 @@ nnoremap <leader><space> :nohlsearch<CR>
 au BufWritePre * :%s/\s\+$//e
 au BufNewFile,BufFilePre,BufRead  *.md  set filetype=markdown
 au! BufNewFile,BufRead  *.csv  setf csv
-" " Python Autogroup {{{
+" Python Autogroup {{{
 augroup python
   autocmd!
   autocmd BufNewFile,BufRead *.py set filetype=python
@@ -219,7 +218,7 @@ augroup j
 augroup end
 " }}}
 " XML Autogroup {{{
-augroup xml html
+augroup xml
   autocmd!
   autocmd BufNewFile,BufRead *.xml,*.html
         \ set tabstop=2                       |
@@ -274,26 +273,28 @@ require('lualine').setup {
         'buffers',
         show_filename_only = true,   -- Shows shortened relative path when set to false.
         show_modified_status = true, -- Shows indicator when the buffer is modified.
+        -- 0: Shows buffer name
+        -- 1: Shows buffer index (bufnr)
+        -- 2: Shows buffer name + buffer index (bufnr)
+        mode = 2,
+        -- Maximum width of buffers component,
+        -- it can also be a function that returns
+        -- the value of `max_length` dynamically.
+        max_length = vim.o.columns * 2 / 3,
 
-        mode = 2, -- 0: Shows buffer name
-                  -- 1: Shows buffer index (bufnr)
-                  -- 2: Shows buffer name + buffer index (bufnr)
-
-        max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
-                                            -- it can also be a function that returns
-                                            -- the value of `max_length` dynamically.
+        -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
         filetype_names = {
           TelescopePrompt = 'Telescope',
           dashboard = 'Dashboard',
           packer = 'Packer',
           fzf = 'FZF',
           alpha = 'Alpha'
-        }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
+        },
 
         buffers_color = {
           -- Same values as the general color option can be used here.
-          active = 'lualine_{section}_normal',     -- Color for active buffer.
-          inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
+          -- active = 'lualine_{section}_normal',     -- Color for active buffer.
+          -- inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
         },
       },
     },
@@ -529,7 +530,7 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-"" }}}
+" }}}
 " vim-test {{{
 nnoremap <silent> <Leader>tn :TestNearest<CR>
 nnoremap <silent> <Leader>tf :TestFile<CR>
@@ -542,12 +543,12 @@ let test#java#runner = 'gradletest'
 " let g:ctrlp_map = '<c-f>'
 " let g:ctrlp_cmd = 'CtrlP'
 " let g:ctrlp_custom_ignore='.class'
-"}}}
+" }}}
 " Netrw {{{
 let g:netrw_keepdir=0
 autocmd FileType netrw setl bufhidden=delete
 let g:netrw_localcopydircmd='cp -r'
-"" }}}
+" }}}
 " Fugitive {{{
 " Auto remove old fugitive files
 autocmd BufReadPost fugitive://* set bufhidden=delete
