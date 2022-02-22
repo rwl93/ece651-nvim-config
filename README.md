@@ -9,12 +9,13 @@ package manager which will need to be updated for other distributions.
 The Ubuntu package manager version of Neovim does not include the LSP tools so we'll be building from source.
 Please run [this build script](./neovim_build.sh)  that will run through the Neovim build process:
 ```sh
+# OPTIONAL: Setup Dependencies Beforehand (not recommended) already done in neovim_build.sh
 # Update packages
-sudo apt update && sudo apt upgrade
+# sudo apt update && sudo apt upgrade
 # Install dependencies
-sudo apt install nodejs npm openjdk-16-jdk clang-format ripgrep fd-find fzf \
-                 python3 python3-pip
-sudo pip3 install neovim
+# sudo apt install nodejs npm openjdk-16-jdk clang-format ripgrep fd-find \
+#                  python3 python3-pip
+# sudo pip3 install neovim
 # Run build script
 ./neovim_build.sh
 ```

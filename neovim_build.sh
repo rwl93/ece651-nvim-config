@@ -116,7 +116,14 @@ wget -O ${HOME}/.local/share/nvim/site/autoload/plug.vim \
 # 6. Install dependencies
 cat << EOF
 
-
+-------------------------------------------------------------------------------
+Dependencies Section:
+EOF
+read -p "Would you like to install dependencies for neovim? [y]/n: " installdeps
+installdeps=${installdeps:-n}
+if [ "$installdeps" == "y" -o "$installdeps" == "Y" ]
+then
+cat << EOF
 -------------------------------------------------------------------------------
 Installing dependencies: Nodejs and npm
 EOF
@@ -134,15 +141,13 @@ cat << EOF
 -------------------------------------------------------------------------------
 Installing dependencies: Java and clang-format
 EOF
-sudo apt install openjdk-16-jdk clang-format
+sudo apt install -y openjdk-16-jdk clang-format
 # Telescope reqs
 cat << EOF
 -------------------------------------------------------------------------------
 Installing dependencies: Ripgrep fd-find fzf
 EOF
-sudo apt install ripgrep fd-find
-# Fzf
-sudo apt install fzf
+sudo apt install -y ripgrep fd-find
 # Python3 reqs
 cat << EOF
 -------------------------------------------------------------------------------
@@ -150,9 +155,18 @@ Installing dependencies: python3
 EOF
 sudo apt install python3 python3-pip
 sudo pip3 install neovim
+else
+    echo "Skipping dependency install"
+fi
 
 # 7. Install plugins
 nvim -E -u vimrc-install +PlugInstall - <<<'helptags ALL'
+
+# 8. Setup Telescope fzf
+neovimbuilddir=`pwd`
+cd $HOME/.local/share/nvim/plugged/telescope-fzf-native.nvim/
+make
+cd $neovimbuilddir
 
 # 8. Point to walkthrough
 cat << EOF
