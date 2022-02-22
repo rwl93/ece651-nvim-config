@@ -101,7 +101,7 @@ then
   mv $HOME/.local/share/nvim $HOME/.local/share/nvim-backup
 fi
 mkdir -p $HOME/.local/share/nvim/site/doc
-cp ece651-config.txt /home/rwl93/.local/share/nvim/site/doc/ece651-config.txt
+ln -s `pwd`/ece651-config.txt $HOME/.local/share/nvim/site/doc/ece651-config.txt
 
 # 5. Install vim-plug
 echo "Installing vim-plug to manage plugins"
@@ -111,15 +111,29 @@ git clone https://github.com/junegunn/vim-plug.git
 sh -c 'curl -fLo ${HOME}/.local/share/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-# 6. Install plugins
+
+# 6. Install dependencies
+echo "Installing dependencies: Nodejs and npm"
+sudo apt update
+# required for install LSP servers
+sudo apt install -y nodejs npm
+# Java
+sudo apt install openjdk-16-jdk clang-format
+# Telescope reqs
+sudo apt install ripgrep fd-find
+
+# 7. Install plugins
 nvim -E -u vimrc +PlugInstall - <<<'helptags ALL'
 
-# 7. Point to walkthrough
+# 8. Point to walkthrough
 cat << EOF
 Congratulations! Neovim was successfully installed.
 To get started, open Neovim with nvim (or vim if chosen earlier) and type:
     :PlugInstall
 Make sure to hit enter to run the command.
+
+Note: Don't worry about the startup errors right now they will go away once
+we've installed the plugins and LSP servers.
 
 We are using vim-plug to manage plugins. This command installs all of the
 plugins specified in the vimrc ($HOME/.config/nvim/init.vim).
@@ -128,6 +142,23 @@ When vim-plug has completed quit out of vim by typing ":q" (which is much more
 intuitive than <C-x><C-c>). Now restart vim and you will notice that the
 Telescope plugin is installing some stuff. This will only happen the first time
 after installing the plugin so don't worry about slow startup times.
+
+Now install the LSP servers that you would like to use. We'll be using
+nvim-lsp-installer to help install the servers:
+    :LspInstallInfo
+This will bring up a popup menu with all of the available LSP servers. You can
+navigate to any LSP server and press "i" to install the server. The suggested
+servers are:
+- jdtls (requires that you have Java installed)
+- clangd (c/cpp)
+- dockerls (docker)
+- zeta_note (markdown)
+- vimls (for editing vimrc)
+- sumneko_lua (Neovim uses Lua so you might eventually edit some Lua)
+
+Note if you are adding other LSP servers make sure to add them to the list in
+your init.vim ($HOME/.config/nvim/init.vim) under the Plugins>LSP Servers
+section. You can type "/local servers<Enter>" to search for the exact line.
 
 Now take a look through the documentation for the vim config which will explain
 the customizations and workflow we just installed. To do this run:

@@ -52,6 +52,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make' }
 Plug 'nvim-telescope/telescope-project.nvim'
 Plug 'nvim-telescope/telescope-frecency.nvim'
@@ -371,8 +372,7 @@ end
 local capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
-local servers = {'jdtls', 'pyright', 'sumneko_lua', 'vimls', 'clangd',
-                 'dockerls', 'texlab', 'zeta_note'}
+local servers = {'jdtls', 'sumneko_lua', 'vimls', 'clangd', 'dockerls', 'zeta_note'}
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup{
     capabilities = capabilities,
@@ -475,9 +475,6 @@ EOF
 " Linting {{{
 lua << EOF
   require('lint').linters_by_ft = {
-    markdown = {'vale', },
-    python = {'pylint',},
-    vimwiki = {'proselint',},
     java = {'checkstyle',},
   }
 EOF
