@@ -267,12 +267,54 @@ require('lualine').setup {
     theme = 'dracula',
     section_separators = '',
     component_separators = '',
-  }
+  },
+  tabline = {
+    lualine_a = {
+      {
+        'buffers',
+        show_filename_only = true,   -- Shows shortened relative path when set to false.
+        show_modified_status = true, -- Shows indicator when the buffer is modified.
+
+        mode = 2, -- 0: Shows buffer name
+                  -- 1: Shows buffer index (bufnr)
+                  -- 2: Shows buffer name + buffer index (bufnr)
+
+        max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
+                                            -- it can also be a function that returns
+                                            -- the value of `max_length` dynamically.
+        filetype_names = {
+          TelescopePrompt = 'Telescope',
+          dashboard = 'Dashboard',
+          packer = 'Packer',
+          fzf = 'FZF',
+          alpha = 'Alpha'
+        }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
+
+        buffers_color = {
+          -- Same values as the general color option can be used here.
+          active = 'lualine_{section}_normal',     -- Color for active buffer.
+          inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
+        },
+      },
+    },
+    lualine_b = {},
+    lualine_c = {},
+    -- lualine_b = {'branch'},
+    -- lualine_c = {'filename'},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {'tabs'}
+  },
 }
 END
 " }}}
+" Gitsigns {{{
+lua << END
+require('gitsigns').setup()
+END
+" }}}
 " Treesitter {{{
-lua <<EOF
+lua << EOF
 require'nvim-treesitter.configs'.setup {
   -- One of "all", "maintained" (parsers with maintainers), or a list of languages
   ensure_installed = "maintained",
@@ -361,7 +403,6 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gw', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gW', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)

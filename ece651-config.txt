@@ -6,7 +6,203 @@ describes the plugins installed, local mappings, and vimrc settings.
 NOTE: We assume that you have at least basic familiarity with the Vim editor.
 If you are new to Vim, please refer to |vimtutor| <-- press K or <C-]> to jump.
 
+===============================================================================
+CONTENTS                                                  ECE651ConfigContents*
+  1. Usage ................... |ECE651ConfigUsage|
+  2. Mappings ................ |ECE651ConfigMappings|
+  3. Plugins ................. |ECE651ConfigPlugins|
+  4. Settings ................ |ECE651ConfigSettings|
+  5. FAQ ..................... |ECE651ConfigFAQ|
+  6. Contributing ............ |ECE651ConfigContributing|
+  7. Changelog ............... |ECE651ConfigChangelog|
+  8. To-do ................... |ECE651ConfigTodo|
 
+===============================================================================
+USAGE                                                       *ECE651ConfigUsage*
 
-	*Todo	fjdkslafjkdsla
-	*Error	something wrong
+In progress...
+===============================================================================
+MAPPINGS                                                 *ECE651ConfigMappings*
+
+Several mappings are setup in the vimrc/init.vim to make common commands
+faster.
+
+Leader:~
+- <Leader> is mapped to `,`
+
+                                                   *ECE651ConfigInsertMappings*
+Insert-mode:~
+- `jk`                         Mapped to <Esc> to exit insert mode
+In Ultisnip Insert:
+- <tab>                      Jump to next field
+- <s-tab>                    Jump to prev field
+
+                                                   *ECE651ConfigNormalMappings*
+Normal-mode:~
+- <C-n>                      Next buffer `:bn`
+- <C-p>                      Previous buffer `:bp`
+- <C-h>,<C-j>,<C-k>,<C-l>    Control vim movement keys to navigate splits
+- <space>                    Toggle fold `za`
+- `gV`                         Visual select last inserted text ``[v```]`
+- `sv`                         Source vimrc (may output errors) `:so VIMRCPATH`
+- `ev`                         Edit vimrc
+- <leader><space>            Stop search highlighting `:nohlsearch`
+- <leader>u                  Expand Ultisnip (not necessary most the time due
+                             to completion
+- <leader>tn                 `:TestNearest`
+- <leader>tf                 `:TestFile`
+- <leader>ts                 `:TestSuite`
+- <leader>tl                 `:TestLast`
+- <leader>tg                 `:TestVisit`
+
+Provided by dcoverage:
+- <leader>dg                 Generate, save and show coverage
+- <leader>dc                 Toggle coverage split
+- <leader>ds                 Toggle code highlighting
+
+                                                 *ECE651ConfigTelescopeMappings*
+Telescope mappings:~
+Telescope Insert-mode:
+<C-j>                        Move to next selection (like moving down in list)
+<C-k>                        Move to previous selection (like moving up)
+<Down>                       History next search (like on command line)
+<Up>                         History prev search
+<C-s>                        Cycle next previewer view
+                             Useful for Git commits to see commit date and diff
+<C-a>                        Cycle prev previewer view
+
+Telescope pickers (Normal-mode):
+<C-f>                        Search git files `:Telescope git_files`
+<leader>ff                   Search project filepath
+                             `:Telescope find_files cwd=expand("%:p:h")`
+<leader>fg                   Grep all files in project dir
+                             `:Telescope live_grep`
+<leader>fw                   Grep word under cursor
+`:lua require('telescope.builtin').grep_string({search=vim.fn.expand("<cword>")})`
+<leader>fs                   Grep a string. Useful if <leader>fg is slow
+`:lua require('telescope.builtin').grep_string({search=vim.fn.input("Grep For > ")})`
+<leader>fb                   Search currently open buffers
+                             `:Telescope buffers`
+<leader>fm                   Search most recently used files
+                             `:Telescope oldfiles`
+<leader>bg                   Grep current file
+`:Telescope current_buffer_fuzzy_find layout_config={prompt_position='top'} sorting_strategy=ascending`
+<leader>bw                   Grep for word under cursor in current buffer
+`:lua require('telescope.builtin').grep_string({cwd=vim.fn.expand("%:p:h"), search=vim.fn.expand("<cword>")})`
+<leader>bs                   Grep for string in current buffer
+`:lua require('telescope.builtin').grep_string({cwd=vim.fn.expand("%:p:h"), search=vim.fn.input("Grep For > ")})`
+<leader>vh                   Search for vim help
+                             `:Telescope help_tags`
+<leader>gb                   Navigate git branches
+                             `:Telescope git_branches`
+<leader>gc                   Navigate previous commits
+                             `:Telescope git_commits`
+<leader>ld                   Search LSP definitions
+                             `:Telescope lsp_definitions`
+<leader>lr                   Search LSP References
+                             `:Telescope lsp_references`
+<leader>li                   Search LSP implementation
+                             `:Telescope lsp_implementations`
+<leader>ls                   Search LSP Document symbols
+                             `:Telescope lsp_document_symbols`
+<leader>lws                  Search LSP Workspace symbols
+                             `:Telescope lsp_workspace_symbols`
+
+                                                      *ECE651ConfigLSPMappings*
+LSP mappings:~
+`gD`                           Go to declaration
+`gd`                           Go to definition
+`K`                            Hover / Show help
+`gr`                           Go to references
+`gs`                           Signature help
+`gi`                           Go to implementation
+`gt`                           Go to type definition
+`gw`                           Document symbols
+`gW`                           Workspace symbols
+<leader>ca                   Code actions
+<leader>cr                   Rename symbol
+<leader>=                    Format code
+
+<leader>e                    Open Diagnostics
+[d                           Go to prev diagnostic
+]d                           Go to next diagnostic
+<leader>q                    Populate location list with diagnostics
+
+                                               *ECE651ConfigCompletionMappings*
+Completion mappings:~
+<C-j>                        Scroll documentation popup down
+<C-k>                        Scroll documentation popup up
+<C-Space>                    Start completion
+<C-e>                        Abort completion
+<C-y>                        Select current completion
+<C-n>                        Next completion
+<C-p>                        Prev completion
+See |ins-completion| for more built-in vim completion
+
+===============================================================================
+PLUGINS                                                   *ECE651ConfigPlugins*
+
+- |vim-plug|:      Plugin manager
+- |dcoverage|:     Clover code coverage helper
+  Normal mode map: `,dg` or `:DcovGenAndSaveCoverage` to generate Clover coverage report
+  `,ds` to toggle code highlighting
+  `,dc` to toggle coverage report
+- |telescope.nvim|: File navigation (see |ECE651ConfigTelescopeMappings|)
+- |LSP|: Language servers for Java, C/C++, Docker, Markdown, Lua, Vim
+         See |ECE651ConfigLSPMappings|
+- |cmp|: Code completion. See |ECE651ConfigCompletionMappings|
+- |projectionist|: helpful for switching between main and test files
+  Setup `.projections.json` in your project dir
+  An example projectionist config for the battleship project is given in [projectionist template](projections.json)
+  Use `:A` to switch between main and test files (`A` stands for alternate)
+  Should add `.projections.json` to your `.gitignore`
+- |fugitive|: Git integration
+  Open git status pane with `:G`
+  stage files with `-` or `s`
+  see inline diff with =
+  `cc` to commit
+  `:Git pull` to pull
+  `:Git push` to push
+  Also, see [Vimcasts 31-35](http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/)
+- |vim-gradle|: Gradle wrapper
+  `:Gradle <commands>` (e.g. `:Gradle clean build`)
+  `:h vim-gradle`
+- |vim-test|: Testing tools. See |ECE651ConfigNormalMappings|
+- |ultisnips|: Snippet manager
+- |vim-snippets|: Predefined snippets
+- |vim-surround|: Mappings to manipulate surrounding {[()]}
+- |vim-commentary|: Comment code with `gcc` or visual mode `gc`
+- |vim-vinegar|: Convenient settings for Netrw
+- |unimpaired|: Helpful bracket mappings
+- |vim-repeat|: Repeat more commands with `.`
+- |tagbar|: Tagbar for file navigation
+- |nvim-treesitter|: Fancy syntax recognition
+- |nvim-colorizer|: Show colors of colorcodes
+- |dracula|: cool dark colorscheme (default)
+- |gotham|: cool dark colorscheme
+- |lualine|: Pretty statusline
+- |plenary|: Helpful Lua commands to support other plugins
+- |nvim-web-devicons|: Nice icons in vim (requires a patched font)
+- |gitsigns|: Nice signs to mark git changes and much more (see help)
+
+===============================================================================
+SETTINGS                                                 *ECE651ConfigSettings*
+
+See vimrc / ${HOME}/.config/nvim/init.vim "Basic UI" section for all of the
+settings. See vim help if you are confused about any of the settings.
+
+===============================================================================
+FAQ                                                           *ECE651ConfigFAQ*
+
+===============================================================================
+CONTRIBUTING                                         *ECE651ConfigContributing*
+
+Users are encouraged to contribute by submitting issues and pull requests to
+https://github.com/rwl93/ece651-nvim-config
+
+===============================================================================
+CHANGELOG                                               *ECE651ConfigChangelog*
+
+===============================================================================
+TODO                                                         *ECE651ConfigTodo*
+	*Todo	add workflow tutorial

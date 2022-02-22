@@ -34,7 +34,7 @@ mappings used by this config.
     - Fuzzy finder file navigation
     - `<C-f>`: Find files in git repository
     - sevaral sources installed not listed in this list.
-- LSP and completion is setup for Java, C/Cpp, ...
+- LSP and completion is setup for Java, C/C++, Docker, Markdown, Lua, Vim
 - [vim-projectionist](https://github.com/tpope/vim-projectionist) : helpful for switching between main and test files
     - Setup `.projections.json` in your project dir
     - An example projectionist config for the battleship project is given in [projectionist template](projections.json)
@@ -57,7 +57,7 @@ mappings used by this config.
 - [vim-surround](https://github.com/tpope/vim-surround): Mappings to manipulate surrounding {[()]}
 - [vim-commentary](https://github.com/tpope/vim-commentary): Comment code with `gcc` or visual mode `gc`
 - [vim-vinegar](https://github.com/tpope/vim-vinegar): Convenient settings for Netrw
-'tpope/vim-unimpaired'
+- [vim-unimpaired](https://github.com/tpope/vim-unimpaired): Helpful bracket mappings
 - [ultisnips](https://github.com/SirVer/ultisnips): Snippet manager
 - [vim-snippets](https://github.com/honza/vim-snippets): Predefined snippets
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim): Nice signs to mark git changes and much more (see help)
