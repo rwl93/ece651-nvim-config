@@ -25,6 +25,8 @@ Plug 'nvim-lualine/lualine.nvim'
 " Replaced with gitsigns: Plug 'airblade/vim-gitgutter'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'shumphrey/fugitive-gitlab.vim'
 " Color helper
 Plug 'norcalli/nvim-colorizer.lua'
 " Commands and text objects for surrounding objects {(['""'])}

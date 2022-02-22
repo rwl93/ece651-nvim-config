@@ -32,6 +32,17 @@ TODO:...
 Please see `:h ece651-config` for documentation on the plugins, settings, and
 mappings used by this config.
 
+## Gitlab integration
+I use the [Glab](https://github.com/profclems/glab) command line tool to handle
+gitlab issues and
+[fugitive](https://github.com/tpope/vim-fugitive) for git diffs, committing,
+merging, etc. but it doesn't have issue support.
+There are github neovim integrations,
+(see [octo.nvim](https://github.com/pwntester/octo.nvim))
+but I haven't seen one for gitlab. Note
+[fugitive-gitlab.vim](https://github.com/shumphrey/fugitive-gitlab.vim) provides
+completion for fugitive from gitlab.
+
 ## Package list
 - [vim-plug](https://github.com/junegunn/vim-plug) : Plugin manager
 - [dcoverage](https://github.com/rwl93/dcoverage) : Clover code coverage helper
@@ -57,6 +68,9 @@ mappings used by this config.
     - `:Git push` to push
     - See `:h fugitive` as there is much more
     - Also, see [Vimcasts 31-35](http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/)
+- [vim-rhubarb](https://github.com/tpope/vim-rhubarb): Fugitive github integration
+- [fugitive-gitlab.vim](https://github.com/shumphrey/fugitive-gitlab.vim): Fugitive gitlab integration
+    - See the docs to setup for private gitlab instances
 - [vim-gradle](https://github.com/hdiniz/vim-gradle): Gradle wrapper
     - `:Gradle <commands>` (e.g. `:Gradle clean build`)
     - `:h vim-gradle`
